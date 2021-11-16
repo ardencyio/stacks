@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -c -o ../helm
+    kompose.version: 1.26.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: rest
+  name: rest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: rest
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -c -o ../helm
+        kompose.version: 1.26.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: rest
+    spec:
+      containers:
+        - env:
+            - name: PGRST_DB_ANON_ROLE
+              value: postgres
+            - name: PGRST_DB_SCHEMA
+              value: public, storage
+            - name: PGRST_DB_URI
+              value: postgres://postgres:postgres@db:5432/postgres
+            - name: PGRST_JWT_SECRET
+              value: super-secret-jwt-token-with-at-least-32-characters-long
+          image: postgrest/postgrest:nightly-2021-03-05-19-03-d3a8b5f
+          name: supabase-rest
+          resources: {}
+      restartPolicy: Always
+status: {}

@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -c -o ../helm
+    kompose.version: 1.26.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: auth
+  name: auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: auth
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -c -o ../helm
+        kompose.version: 1.26.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: auth
+    spec:
+      containers:
+        - env:
+            - name: API_EXTERNAL_URL
+              value: http://localhost:8000
+            - name: DATABASE_URL
+              value: postgres://postgres:postgres@db:5432/postgres?sslmode=disable
+            - name: DB_NAMESPACE
+              value: auth
+            - name: GOTRUE_API_HOST
+              value: auth
+            - name: GOTRUE_DB_DRIVER
+              value: postgres
+            - name: GOTRUE_DISABLE_SIGNUP
+              value: "false"
+            - name: GOTRUE_JWT_AUD
+              value: authenticated
+            - name: GOTRUE_JWT_DEFAULT_GROUP_NAME
+              value: authenticated
+            - name: GOTRUE_JWT_EXP
+              value: "3600"
+            - name: GOTRUE_JWT_SECRET
+              value: super-secret-jwt-token-with-at-least-32-characters-long
+            - name: GOTRUE_LOG_LEVEL
+              value: DEBUG
+            - name: GOTRUE_MAILER_AUTOCONFIRM
+              value: "false"
+            - name: GOTRUE_MAILER_SUBJECTS_CONFIRMATION
+              value: Confirm Your Signup
+            - name: GOTRUE_MAILER_SUBJECTS_INVITE
+              value: You have been invited
+            - name: GOTRUE_MAILER_SUBJECTS_MAGIC_LINK
+              value: Your Magic Link
+            - name: GOTRUE_MAILER_SUBJECTS_RECOVERY
+              value: Reset Your Password
+            - name: GOTRUE_MAILER_URLPATHS_CONFIRMATION
+              value: /auth/v1/verify
+            - name: GOTRUE_MAILER_URLPATHS_INVITE
+              value: /auth/v1/verify
+            - name: GOTRUE_MAILER_URLPATHS_RECOVERY
+              value: /auth/v1/verify
+            - name: GOTRUE_OPERATOR_TOKEN
+              value: super-secret-operator-token
+            - name: GOTRUE_SITE_URL
+              value: http://localhost:8000
+            - name: GOTRUE_SMTP_ADMIN_EMAIL
+              value: admin@email.com
+            - name: GOTRUE_SMTP_HOST
+              value: mail
+            - name: GOTRUE_SMTP_PASS
+              value: GOTRUE_SMTP_PASS
+            - name: GOTRUE_SMTP_PORT
+              value: "2500"
+            - name: GOTRUE_SMTP_USER
+              value: GOTRUE_SMTP_USER
+            - name: PORT
+              value: "9999"
+          image: supabase/gotrue:latest
+          name: supabase-auth
+          resources: {}
+      restartPolicy: Always
+status: {}

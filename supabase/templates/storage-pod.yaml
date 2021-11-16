@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -c -o ../helm
+    kompose.version: 1.26.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: storage
+  name: storage
+spec:
+  containers:
+    - env:
+        - name: ANON_KEY
+          value: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTYwMzk2ODgzNCwiZXhwIjoyNTUwNjUzNjM0LCJyb2xlIjoiYW5vbiJ9.36fUebxgx1mcBo4s19v0SzqmzunP--hm_hep0uLX0ew
+        - name: DATABASE_URL
+          value: postgres://postgres:postgres@db:5432/postgres?sslmode=disable
+        - name: FILE_SIZE_LIMIT
+          value: "52428800"
+        - name: FILE_STORAGE_BACKEND_PATH
+          value: /var/data/storage
+        - name: GLOBAL_S3_BUCKET
+          value: supa-storage-testing
+        - name: PGOPTIONS
+          value: -c search_path=storage
+        - name: PGRST_JWT_SECRET
+          value: super-secret-jwt-token-with-at-least-32-characters-long
+        - name: POSTGREST_URL
+          value: http://rest:3000
+        - name: PROJECT_REF
+          value: bjwdssmqcnupljrqypxz
+        - name: REGION
+          value: us-east-1
+        - name: SERVICE_KEY
+          value: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTYwMzk2ODgzNCwiZXhwIjoyNTUwNjUzNjM0LCJyb2xlIjoic2VydmljZV9yb2xlIn0.necIJaiP7X2T2QjGeV-FhpkizcNTX8HjDDBAxpgQTEI
+        - name: STORAGE_BACKEND
+          value: file
+      image: supabase/storage-api:v0.9.1
+      name: storage
+      resources: {}
+  restartPolicy: OnFailure
+status: {}
